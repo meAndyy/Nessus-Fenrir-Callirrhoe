@@ -5,5 +5,7 @@
     <string name="Register">Register</string>
     <string name="forgetPassword">Forgot Your Password?</string>
     <string name="login">Login</string>
+    <string name="back">Back</string>
+    <string name="reset">Reset</string>
 
 </resources>

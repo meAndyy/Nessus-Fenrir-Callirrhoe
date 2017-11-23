@@ -41,7 +41,7 @@ public class SignupActivity extends AppCompatActivity {
         btnResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                auth.signOut();
+                startActivity(new Intent(SignupActivity.this, ResetPasswordActivity.class));
             }
         });
 
