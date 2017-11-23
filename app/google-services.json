@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "649361143555",
+    "firebase_url": "https://nessus-fenrir-callirrhoe.firebaseio.com",
+    "project_id": "nessus-fenrir-callirrhoe",
+    "storage_bucket": "nessus-fenrir-callirrhoe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649361143555:android:40b147f862907ac6",
+        "android_client_info": {
+          "package_name": "com.example.andy.nessus_fenrir_callirrhoe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "649361143555-0fvsa8f589vdkpu4pruhh424he37q5rn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.andy.nessus_fenrir_callirrhoe",
+            "certificate_hash": "bc923d5f7b9b68eb34c03798bfb9334fd5a828c7"
+          }
+        },
+        {
+          "client_id": "649361143555-ttbmi9lbko8u6tqpg3vd2a8ipehnp9fv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAisvtbqW1iD6SpM3w2Tow7HcDujXUoTNs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "649361143555-ttbmi9lbko8u6tqpg3vd2a8ipehnp9fv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
