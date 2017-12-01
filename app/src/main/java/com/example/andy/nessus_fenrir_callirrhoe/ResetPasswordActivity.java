@@ -1,5 +1,6 @@
 package com.example.andy.nessus_fenrir_callirrhoe;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class ResetPasswordActivity extends AppCompatActivity {
 
     private EditText inputEmail;
-    private Button btnResetPassword, btnBack;
+    private Button btnResetPassword, btnLogin;
     private FirebaseAuth auth;
     private ProgressBar progressBar;
 
@@ -28,15 +29,15 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         inputEmail = (EditText) findViewById(R.id.email);
         btnResetPassword = (Button) findViewById(R.id.btnResetPassword);
-        btnBack = (Button) findViewById(R.id.btnBack);
+        btnLogin = (Button) findViewById(R.id.btnLogin);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         auth = FirebaseAuth.getInstance();
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
             }
         });
 

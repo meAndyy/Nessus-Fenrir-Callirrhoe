@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(new Intent(LoginActivity.this, NFCActivity.class));
             finish();
         }
 
@@ -44,16 +44,18 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnResetPassword = (Button) findViewById(R.id.btnResetPassword);
+        btnSignup = (Button) findViewById(R.id.btnSignup);
+
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        /*btnSignup.setOnClickListener(new View.OnClickListener() {
+        btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this, SignupActivity.class));
             }
-        });*/
+        });
 
         btnResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
