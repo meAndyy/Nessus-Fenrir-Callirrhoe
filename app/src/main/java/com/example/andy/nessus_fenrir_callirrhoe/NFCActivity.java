@@ -32,6 +32,7 @@ public class NFCActivity extends AppCompatActivity {
     public static final String WRITE_FAIL = "Error during writing, is the NFC tag close enough to your device?";
 
     private NdefMessage message = null;
+    boolean check = false;
     private NFCmanager nfcMger;
     Tag myTag;
     FirebaseAuth auth;
@@ -42,8 +43,8 @@ public class NFCActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        
         setContentView(R.layout.activity_nfc);
         nfcMger = new NFCmanager(this);
 
@@ -105,15 +106,17 @@ public class NFCActivity extends AppCompatActivity {
 
         myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         NdefMessage[] m = nfcMger.readFromIntent(intent);
-       String s  = nfcMger.buildTagViews(m);
-
+        String s  = nfcMger.buildTagViews(m);
+        Toast.makeText(this, "Tag value is "+s, Toast.LENGTH_LONG).show();
         if (message != null) {
             nfcMger.writeTag(myTag, message);
-            Toast.makeText(this, "User Info Loaded", Toast.LENGTH_LONG).show();
-
+            Toast.makeText(this, "User Info Loaded", Toast.LENGTH_SHORT).show();
+            check = false;
         }
+
         else {
 
         }
     }
+
 }

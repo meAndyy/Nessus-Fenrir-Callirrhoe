@@ -26,6 +26,7 @@ public class NFCmanager {
     private Activity activity;
     private NfcAdapter nfcAdpt;
     public String text;
+    public boolean check;
 
     public NFCmanager(Activity activity) {
         this.activity = activity;
@@ -156,11 +157,17 @@ public class NFCmanager {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
+            check = true;
         //valueNfc.setText("NFC Content: " + text);
         return text;
     }
 
+    public String getText(){
+        return text;
+    }
 
+    public boolean isCheck(){
+        return check;
+    }
 }
 

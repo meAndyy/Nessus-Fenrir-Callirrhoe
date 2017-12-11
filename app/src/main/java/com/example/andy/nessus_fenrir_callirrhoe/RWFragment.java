@@ -39,15 +39,33 @@ public class RWFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_rw, container, false);
         nfcMger = new NFCmanager(getActivity());
         check = false;
         valueNfc = (TextView)v.findViewById(R.id.valueNfc);
         logout = (Button) v.findViewById(R.id.Logout);
-        btnCheck = (Button) v.findViewById(R.id.btnCheck);
-      //  valueNfc.setText(nfcMger.sendTofragment());
+        final FirebaseAuth auth = FirebaseAuth.getInstance();
+
+
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                if(auth.getCurrentUser() == null){
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
+            }
+        });
+
+
+        if (nfcMger.isCheck()){
+            valueNfc.setText(nfcMger.getText());
+        }
+
         return v;
     }
+
+
 
 }
