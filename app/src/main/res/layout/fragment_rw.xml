@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.andy.nessus_fenrir_callirrhoe.NFCActivity">
+
+    <TextView
+        android:id="@+id/valueNfc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="205dp"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/Logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="78dp"
+        android:text="Logout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/shears"
+        android:layout_alignStart="@+id/shears" />
+
+    <TextView
+        android:id="@+id/shears"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Logout"
+        android:layout_alignLeft="@+id/valueNfc"
+        android:layout_alignStart="@+id/valueNfc"
+        android:layout_marginBottom="63dp"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/btnCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="72dp"
+        android:text="Change Mode" />
+
+</RelativeLayout>
+
