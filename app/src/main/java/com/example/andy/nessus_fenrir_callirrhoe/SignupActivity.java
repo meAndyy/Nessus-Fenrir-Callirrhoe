@@ -15,6 +15,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -22,6 +25,9 @@ public class SignupActivity extends AppCompatActivity {
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
+    private DatabaseReference mDatabase;
+    private EditText name;
+    private EditText phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +43,8 @@ public class SignupActivity extends AppCompatActivity {
         password = (EditText) findViewById(R.id.password);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         btnResetPassword = (Button) findViewById(R.id.btnResetPassword);
+        name = (EditText)findViewById(R.id.name);
+        phone = (EditText)findViewById(R.id.phone);
 
         btnResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,22 +66,29 @@ public class SignupActivity extends AppCompatActivity {
 
                 String memail = email.getText().toString().trim();
                 String mpass = password.getText().toString().trim();
+                String mname = name.getText().toString().trim();
+                String mphone = phone.getText().toString().trim();
 
                 if (TextUtils.isEmpty(memail)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (TextUtils.isEmpty(mpass)) {
-                    Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(mname)) {
+                    Toast.makeText(getApplicationContext(), "Enter Name!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (password.length() < 6) {
+                if (TextUtils.isEmpty(mphone)) {
+                    Toast.makeText(getApplicationContext(), "Enter phone number!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (password.length() < 6 || TextUtils.isEmpty(mpass)) {
                     Toast.makeText(getApplicationContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                 final User user = new User(mname, mphone, memail);
                 progressBar.setVisibility(View.VISIBLE);
                 //create user
                 auth.createUserWithEmailAndPassword(memail, mpass)
@@ -82,13 +97,12 @@ public class SignupActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 Toast.makeText(SignupActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
+
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(SignupActivity.this, "Authentication failed." + task.getException(),
                                             Toast.LENGTH_SHORT).show();
                                 } else {
+                                    createUserInDatabase(user);
                                     startActivity(new Intent(SignupActivity.this, NFCActivity.class));
                                     finish();
                                 }
@@ -97,6 +111,19 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    protected void createUserInDatabase(User user){
+
+        String s = "";
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        final FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(auth.getCurrentUser() != null) {
+            s = currentFirebaseUser.getUid();
+
+        }
+        mDatabase.child("users").child(s).setValue(user);
     }
 
     @Override

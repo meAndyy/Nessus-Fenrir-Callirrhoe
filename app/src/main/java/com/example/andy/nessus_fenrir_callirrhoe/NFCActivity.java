@@ -35,7 +35,7 @@ public class NFCActivity extends AppCompatActivity {
     boolean check = false;
     private NFCmanager nfcMger;
     Tag myTag;
-    FirebaseAuth auth;
+   // FirebaseAuth auth;
     private ViewPager pager;
     private TabAdapter adapter;
     private Toolbar toolbar;
@@ -56,17 +56,21 @@ public class NFCActivity extends AppCompatActivity {
         pager.setAdapter(adapter);
         tabLayout.setupWithViewPager(pager);
 
-        auth = FirebaseAuth.getInstance();
+
         final FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        String s  = currentFirebaseUser.getUid();
-        try {
-            message = nfcMger.createRecord(s);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if(auth.getCurrentUser() != null) {
+            String s  = currentFirebaseUser.getUid();
+            try {
+                message = nfcMger.createRecord(s);
+            }
+            catch(UnsupportedEncodingException e)
+            {
+                e.printStackTrace();
+            }
         }
-        catch(UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }
+
 
     }
 
@@ -75,7 +79,6 @@ public class NFCActivity extends AppCompatActivity {
 
         try {
             nfcMger.verifyNFC();
-            nfcMger.enableDispatch();
 
             Intent nfcIntent = new Intent(this, getClass());
             nfcIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -103,19 +106,23 @@ public class NFCActivity extends AppCompatActivity {
 
     @Override
     public void onNewIntent(Intent intent) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if(auth.getCurrentUser() != null) {
+            myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            NdefMessage[] m = nfcMger.readFromIntent(intent);
+            String s = nfcMger.buildTagViews(m);
+            Toast.makeText(this, "Tag value is " + s, Toast.LENGTH_LONG).show();
+            if (message != null) {
+                nfcMger.writeTag(myTag, message);
+                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                Toast.makeText(this, "User Info Loaded", Toast.LENGTH_SHORT).show();
+                check = false;
+            } else {
 
-        myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        NdefMessage[] m = nfcMger.readFromIntent(intent);
-        String s  = nfcMger.buildTagViews(m);
-        Toast.makeText(this, "Tag value is "+s, Toast.LENGTH_LONG).show();
-        if (message != null) {
-            nfcMger.writeTag(myTag, message);
-            Toast.makeText(this, "User Info Loaded", Toast.LENGTH_SHORT).show();
-            check = false;
+            }
         }
-
-        else {
-
+        else{
+            startActivity(new Intent(this, LoginActivity.class));
         }
     }
 

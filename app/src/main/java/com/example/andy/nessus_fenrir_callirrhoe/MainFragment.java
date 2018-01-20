@@ -30,8 +30,11 @@ public class MainFragment extends Fragment {
         txt = (TextView)v.findViewById(R.id.txt);
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String s = user.getEmail();
-        txt.setText("Hello, \n"+s);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if(auth.getCurrentUser() != null) {
+            String s = user.getEmail();
+            txt.setText("Hello, \n" + s);
+        }
         return v;
     }
 

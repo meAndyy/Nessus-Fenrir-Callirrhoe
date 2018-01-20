@@ -44,17 +44,6 @@ public class NFCmanager {
 
     }
 
-    public void enableDispatch() {
-        Intent nfcIntent = new Intent(activity, getClass());
-        nfcIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, nfcIntent, 0);
-        IntentFilter[] intentFiltersArray = new IntentFilter[] {};
-        String[][] techList = new String[][] { { android.nfc.tech.Ndef.class.getName() }, { android.nfc.tech.NdefFormatable.class.getName() } };
-
-        NfcAdapter nfcAdpt = NfcAdapter.getDefaultAdapter(activity);
-        nfcAdpt.enableForegroundDispatch(activity, pendingIntent, intentFiltersArray, techList);
-    }
-
     public void disableDispatch() {
         nfcAdpt.disableForegroundDispatch(activity);
     }
@@ -80,7 +69,6 @@ public class NFCmanager {
                 Ndef ndefTag = Ndef.get(tag);
 
                 if (ndefTag == null) {
-                    // Let's try to format the Tag in NDEF
                     NdefFormatable nForm = NdefFormatable.get(tag);
                     if (nForm != null) {
                         nForm.connect();
@@ -104,15 +92,14 @@ public class NFCmanager {
     public NdefMessage createRecord(String text) throws UnsupportedEncodingException {
         String lang       = "en";
         byte[] textBytes  = text.getBytes();
-        byte[] langBytes  = lang.getBytes("US-ASCII");//Because data transferred in bytes
+        byte[] langBytes  = lang.getBytes("US-ASCII");
         int    langLength = langBytes.length;
         int    textLength = textBytes.length;
         byte[] payload    = new byte[1 + langLength + textLength];
 
-        // set status byte (see NDEF spec for actual bits)
+
         payload[0] = (byte) langLength;
 
-        // copy langbytes and textbytes into payload
         System.arraycopy(langBytes, 0, payload, 1,              langLength);
         System.arraycopy(textBytes, 0, payload, 1 + langLength, textLength);
 
@@ -147,18 +134,17 @@ public class NFCmanager {
 
 //        String tagId = new String(msgs[0].getRecords()[0].getType());
         byte[] payload = msgs[0].getRecords()[0].getPayload();
-        String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16"; // Get the Text Encoding
-        int languageCodeLength = payload[0] & 0063; // Get the Language Code, e.g. "en"
-        // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
+        String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
+        int languageCodeLength = payload[0] & 0063;
 
         try {
-            // Get the Text
+
             text = new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
             check = true;
-        //valueNfc.setText("NFC Content: " + text);
+
         return text;
     }
 
