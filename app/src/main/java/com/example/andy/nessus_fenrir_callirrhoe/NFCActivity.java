@@ -9,6 +9,7 @@ import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.app.ActionBar;
@@ -82,8 +83,6 @@ public class NFCActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
-
     }
 
     protected void onResume() {
@@ -122,23 +121,8 @@ public class NFCActivity extends AppCompatActivity {
             NdefMessage[] m = nfcMger.readFromIntent(intent);
             String s = nfcMger.buildTagViews(m);
             Toast.makeText(this, "Tag value is " + s, Toast.LENGTH_LONG).show();
-            OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
-            String userId = status.getSubscriptionStatus().getUserId();
-            boolean subs = status.getSubscriptionStatus().getSubscribed();
-
-            if(subs) {
-
-                try {
-                    JSONObject notificationContent = new JSONObject("{'contents': {'en': 'Errrrdayyyyyyyy'}," +
-                            "'include_player_ids': ['" + userId + "'], " +
-                            "'headings': {'en': 'Smoke weed 420 '}}");
-
-                    Log.e("OneSignalExample", "postNotification Failure: ");
-                    OneSignal.postNotification(notificationContent, null);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+            RequestAPI api = new RequestAPI();
+            new apiThread().execute("1");
             /*if (message != null) {
                 nfcMger.writeTag(myTag, message);
                 System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -152,5 +136,15 @@ public class NFCActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
         }
 
+    }
+
+    private class apiThread extends AsyncTask<String,Void,String>{
+        @Override
+        protected String doInBackground(String... params) {
+            String playerid = params[0];
+            RequestAPI api = new RequestAPI();
+            api.sendData();
+            return playerid;
+        }
     }
 }
