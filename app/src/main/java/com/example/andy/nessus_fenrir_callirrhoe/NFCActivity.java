@@ -17,12 +17,19 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.onesignal.OSPermissionSubscriptionState;
+import com.onesignal.OneSignal;
+
 import java.io.UnsupportedEncodingException;
 import android.support.design.widget.TabLayout;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class NFCActivity extends AppCompatActivity {
@@ -43,13 +50,17 @@ public class NFCActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
-        nfcMger = new NFCmanager(this);
 
+        nfcMger = new NFCmanager(this);
+        OneSignal.startInit(this)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .unsubscribeWhenNotificationsAreDisabled(true)
+                .init();
         pager = (ViewPager) findViewById(R.id.pager);
         toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         tabLayout = (TabLayout)findViewById(R.id.tablayout);
         setSupportActionBar(toolbar);
         adapter = new TabAdapter(getSupportFragmentManager());
@@ -58,9 +69,10 @@ public class NFCActivity extends AppCompatActivity {
 
 
         final FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        String usremail = currentFirebaseUser.getEmail();
+        OneSignal.sendTag("UserID",usremail);
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        if(auth.getCurrentUser() != null) {
+        if(currentFirebaseUser != null) {
             String s  = currentFirebaseUser.getUid();
             try {
                 message = nfcMger.createRecord(s);
@@ -97,8 +109,6 @@ public class NFCActivity extends AppCompatActivity {
 
     }
 
-
-
    protected void onPause() {
         super.onPause();
         nfcMger.disableDispatch();
@@ -112,18 +122,35 @@ public class NFCActivity extends AppCompatActivity {
             NdefMessage[] m = nfcMger.readFromIntent(intent);
             String s = nfcMger.buildTagViews(m);
             Toast.makeText(this, "Tag value is " + s, Toast.LENGTH_LONG).show();
-            if (message != null) {
+            OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
+            String userId = status.getSubscriptionStatus().getUserId();
+            boolean subs = status.getSubscriptionStatus().getSubscribed();
+
+            if(subs) {
+
+                try {
+                    JSONObject notificationContent = new JSONObject("{'contents': {'en': 'Errrrdayyyyyyyy'}," +
+                            "'include_player_ids': ['" + userId + "'], " +
+                            "'headings': {'en': 'Smoke weed 420 '}}");
+
+                    Log.e("OneSignalExample", "postNotification Failure: ");
+                    OneSignal.postNotification(notificationContent, null);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            /*if (message != null) {
                 nfcMger.writeTag(myTag, message);
                 System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 Toast.makeText(this, "User Info Loaded", Toast.LENGTH_SHORT).show();
                 check = false;
             } else {
 
-            }
+            }*/
         }
         else{
             startActivity(new Intent(this, LoginActivity.class));
         }
-    }
 
+    }
 }
