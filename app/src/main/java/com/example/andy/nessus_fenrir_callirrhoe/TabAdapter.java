@@ -22,6 +22,9 @@ public class TabAdapter extends FragmentPagerAdapter {
             case 1:
 
                 return new RWFragment();
+            case 2:
+
+                return new AddContactFragment();
 
         }
 
@@ -36,10 +39,14 @@ public class TabAdapter extends FragmentPagerAdapter {
             case 1:
             default:
                 return "Tag";
+            case 2:
+                return "Add Contacts";
+
+
         }
     }
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 }

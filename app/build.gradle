@@ -13,7 +13,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "26.0.1"
     defaultConfig {
-        manifestPlaceholders = [onesignal_app_id: "47cc7bc4-8d85-4368-b00c-02d4341db977",
+        manifestPlaceholders = [onesignal_app_id               : "47cc7bc4-8d85-4368-b00c-02d4341db977",
                                 // Project number pulled from dashboard, local value is ignored.
                                 onesignal_google_project_number: "REMOTE"]
         applicationId "com.example.andy.nessus_fenrir_callirrhoe"

@@ -19,6 +19,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+
 public class SignupActivity extends AppCompatActivity {
 
     private EditText email, password;
@@ -81,7 +83,9 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                 final User user = new User(mname, mphone, memail);
+                HashMap<String,String> map = new HashMap<String, String>();
+                map.put("contact"," ");
+                 final User user = new User(mname, mphone, memail, map);
                 progressBar.setVisibility(View.VISIBLE);
                 //create user
                 auth.createUserWithEmailAndPassword(memail, mpass)
@@ -95,7 +99,8 @@ public class SignupActivity extends AppCompatActivity {
                                     Toast.makeText(SignupActivity.this, "Authentication failed." + task.getException(),
                                             Toast.LENGTH_SHORT).show();
                                 } else {
-                                    createUserInDatabase(user);
+                                    DatabaseController dbc = new DatabaseController();
+                                    dbc.createUserInDatabase(user);
                                     startActivity(new Intent(SignupActivity.this, NFCActivity.class));
                                     finish();
                                 }
@@ -106,18 +111,7 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    protected void createUserInDatabase(User user){
 
-        String s = "";
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        final FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if(auth.getCurrentUser() != null) {
-            s = currentFirebaseUser.getUid();
-
-        }
-        mDatabase.child("users").child(s).setValue(user);
-    }
 
     @Override
     protected void onResume() {

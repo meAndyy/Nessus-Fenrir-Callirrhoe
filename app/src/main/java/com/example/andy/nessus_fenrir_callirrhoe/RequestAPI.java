@@ -7,12 +7,6 @@ package com.example.andy.nessus_fenrir_callirrhoe;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -24,6 +18,10 @@ import java.util.Scanner;
 
 public class RequestAPI extends BroadcastReceiver {
 
+    public RequestAPI(){
+
+
+    }
     public void sendData() {
 
         try {
@@ -41,9 +39,9 @@ public class RequestAPI extends BroadcastReceiver {
 
             String strJsonBody = "{"
                     +   "\"app_id\": \"47cc7bc4-8d85-4368-b00c-02d4341db977\","
-                    +   "\"include_player_ids\": [\"a6843498-cd7b-433c-a740-af3c15af6e3f\",\"8467ef94-3a40-41e5-8a0a-b85567cdfc58\"],"
+                    +   "\"include_player_ids\": [\"a6843498-cd7b-433c-a740-af3c15af6e3f\",\"9\"],"
                     +   "\"data\": {\"foo\": \"bar\"},"
-                    +   "\"contents\": {\"en\": \"Stall it out for a joint." +
+                    +   "\"contents\": {\"en\": \"Your friend has tapped in!" +
                     "\"}"
                     + "}";
 
