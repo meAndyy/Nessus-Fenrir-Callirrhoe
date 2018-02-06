@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -27,27 +28,28 @@ import com.onesignal.OSPermissionSubscriptionState;
 import com.onesignal.OneSignal;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import android.support.design.widget.TabLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class NFCActivity extends AppCompatActivity {
-
-    public static final String N0_TAG = "No NFC tag detected!";
-    public static final String WRITE_SUCCESS = "Text written to the NFC tag successfully!";
-    public static final String WRITE_FAIL = "Error during writing, is the NFC tag close enough to your device?";
+public class NFCActivity extends AppCompatActivity implements MainFragment.OnDataPass {
 
     private NdefMessage message = null;
-    boolean check = false;
+
     private NFCmanager nfcMger;
     Tag myTag;
-   // FirebaseAuth auth;
     private ViewPager pager;
     private TabAdapter adapter;
     private Toolbar toolbar;
     private TabLayout tabLayout;
+    String[] sendlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +69,12 @@ public class NFCActivity extends AppCompatActivity {
         adapter = new TabAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
         tabLayout.setupWithViewPager(pager);
+        sendlist = new  String[5];
 
 
         final FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         String usremail = currentFirebaseUser.getEmail();
+        OneSignal.syncHashedEmail(usremail);
         OneSignal.sendTag("UserID",usremail);
 
         if(currentFirebaseUser != null) {
@@ -121,8 +125,13 @@ public class NFCActivity extends AppCompatActivity {
             NdefMessage[] m = nfcMger.readFromIntent(intent);
             String s = nfcMger.buildTagViews(m);
             Toast.makeText(this, "Tag value is " + s, Toast.LENGTH_LONG).show();
-            RequestAPI api = new RequestAPI();
-            new apiThread().execute("1");
+           // RequestAPI api = new RequestAPI();
+
+            for(int i = 0; i < sendlist.length;i++) {
+                System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"+sendlist);
+
+            }
+            new apiThread().execute(sendlist);
             /*if (message != null) {
                 nfcMger.writeTag(myTag, message);
                 System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -138,13 +147,51 @@ public class NFCActivity extends AppCompatActivity {
 
     }
 
+    public String[] toList(HashMap<String,List<String>> map){
+        SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
+        String currcontact = pref.getString("curr_contact","DEFAULT");
+        List<String> currconlist = new ArrayList<>();
+        if (map != null){
+
+            for(Map.Entry m:map.entrySet()) {
+                if(m.getKey().equals(currcontact)){
+                    currconlist = (List<String>) m.getValue();
+
+                }
+                else{
+                    System.out.println("skip");
+                }
+            }
+
+        }
+        String[] countries = currconlist.toArray(new String[currconlist.size()]);
+
+            return countries;
+        }
+
+
+    @Override
+    public void onDataPass(HashMap<String, List<String>> data) {
+
+         sendlist = toList(data);
+
+
+    }
+
     private class apiThread extends AsyncTask<String,Void,String>{
         @Override
         protected String doInBackground(String... params) {
-            String playerid = params[0];
-            RequestAPI api = new RequestAPI();
-            api.sendData();
-            return playerid;
+
+            for (int i = 0; i < params.length; i++) {
+                String playerid = params[i];
+                System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ"+playerid);
+                playerid.trim();
+                RequestAPI api = new RequestAPI();
+                api.sendData(playerid);
+            }
+
+            return "1";
         }
     }
+
 }

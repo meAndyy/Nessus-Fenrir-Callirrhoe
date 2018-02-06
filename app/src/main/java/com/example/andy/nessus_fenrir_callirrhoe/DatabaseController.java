@@ -24,7 +24,7 @@ public class DatabaseController {
     protected DatabaseReference mDatabase;
     protected FirebaseAuth auth;
     String uid;
-    HashMap<String,List<String>> result;
+
 
     public DatabaseController(){
 
@@ -38,6 +38,7 @@ public class DatabaseController {
         }
 
     }
+
 
     protected void createUserInDatabase(User user){
 
@@ -58,12 +59,13 @@ public class DatabaseController {
 
     }
 
-    protected HashMap<String, List<String>> listeningForContacts(){
 
+    protected void deleteData(String del){
 
-
-        return result;
+        mDatabase.child("users").child(uid).child("contacts").child(del).removeValue();
     }
+
+
 
     protected String getUid(){
         return uid;

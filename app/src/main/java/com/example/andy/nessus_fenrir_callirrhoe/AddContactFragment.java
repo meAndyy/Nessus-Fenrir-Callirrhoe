@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -54,6 +55,8 @@ public class AddContactFragment extends Fragment {
                 String groupname = ntext.getText().toString();
                 if (!groupname.isEmpty() && groupname != null) {
                     viewgrp.setText(groupname);
+                    hideKeyboard();
+
 
                 }
                 else {
@@ -69,6 +72,7 @@ public class AddContactFragment extends Fragment {
                 if (!email.isEmpty()&& !email.contains(" ") ){
                     contacts.add(email);
                     ctext.setText("");
+                    hideKeyboard();
                 }
 
                 else {
@@ -134,6 +138,15 @@ public class AddContactFragment extends Fragment {
         });
 
         return v;
+    }
+
+    public void hideKeyboard() {
+        // Check if no view has focus:
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
 }

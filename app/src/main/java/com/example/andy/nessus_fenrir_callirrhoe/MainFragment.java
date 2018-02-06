@@ -1,13 +1,18 @@
 package com.example.andy.nessus_fenrir_callirrhoe;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -32,34 +37,41 @@ import java.util.StringTokenizer;
 
 public class MainFragment extends Fragment {
 
+    public interface OnDataPass {
+        void onDataPass( HashMap<String, List<String>> data);
+    }
+
     ExpandableListView list;
     ExpandableListAdapter adapter;
-    ArrayList<String> contacts;
     HashMap<String, List<String>> result = new HashMap<>();
     TextView txtv;
+    DatabaseController dbc;
+    OnDataPass dataPasser;
 
     public MainFragment() {
         // Required empty public constructor
     }
 
-
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        dataPasser = (OnDataPass) context;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
        final View v = inflater.inflate(R.layout.fragment_main, container, false);
 
-        DatabaseController dbc = new DatabaseController();
-        DatabaseReference dbr = dbc.getDatabase();
+        dbc = new DatabaseController();
         String uid = dbc.getUid();
         txtv =(TextView)v.findViewById(R.id.txtv);
         txtv.setText(uid);
         list = (ExpandableListView)v.findViewById(R.id.list);
        /* dbr.child("users").child(uid).child("contacts").addValueEventListener(new ValueEventListener() */
 
-
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("contacts");
-        ref.addListenerForSingleValueEvent(
+        ref.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -67,6 +79,13 @@ public class MainFragment extends Fragment {
                        ArrayList<String> headers =  collectPhoneNumbers((Map<String,Object>) dataSnapshot.getValue());
                         adapter = new ExpandAdapter(v.getContext(),headers, result);
                         list.setAdapter(adapter);
+                        if (result != null){
+                            passData(result);
+                        }
+                        else {
+                            System.out.println("fffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuuuu");
+                        }
+
                     }
 
                     @Override
@@ -75,6 +94,55 @@ public class MainFragment extends Fragment {
                     }
                 });
 
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                int itemType = ExpandableListView.getPackedPositionType(id);
+
+                if ( itemType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+                    String curr = result.keySet().toArray()[position].toString();
+                    dbc.deleteData(curr);
+                    Toast.makeText(getActivity(), "The "+curr+ " group has been deleted.", Toast.LENGTH_LONG).show();
+                    return true;
+
+                } else if(itemType ==  ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+
+                    return false;
+
+                } else {
+
+                    return false;
+                }
+
+            }
+        });
+
+        list.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+
+                final String curr = result.keySet().toArray()[groupPosition].toString();
+                final AlertDialog.Builder adb = new AlertDialog.Builder(v.getContext());
+                adb.setTitle("Set Up");
+                adb.setMessage("Would you like to make "+curr+" your current contact group?");
+                adb.setNegativeButton("No Thanks", null);
+                adb.setPositiveButton("Sure", new AlertDialog.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        txtv.setText(curr);
+                        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("curr_contact",curr);
+                        editor.commit();
+                        String s = sharedPref.getString("curr_contact","DEFAULT");
+                        Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+                    }});
+                adb.show();
+                return true;
+            }
+        });
+
 
 
         return v;
@@ -82,8 +150,6 @@ public class MainFragment extends Fragment {
 
     private ArrayList<String> collectPhoneNumbers(Map<String,Object> users) {
 
-
-        ArrayList<String> holder = new ArrayList<String>();
         int i = 0;
         ArrayList<String> headers = new ArrayList<String>();
         if(users != null) {
@@ -92,7 +158,7 @@ public class MainFragment extends Fragment {
                 ArrayList<String> addresses = new ArrayList<String>();
                 String s = entry.getKey();
                 String x = entry.getValue().toString();
-                System.out.println("!!!!!!!!!!!!!!!!!!!!!!" +s +""+ x);
+               // System.out.println("!!!!!!!!!!!!!!!!!!!!!!" +s +""+ x);
                 StringTokenizer tokenizer = new StringTokenizer(x, ",");
                 while (tokenizer.hasMoreTokens()) {
                     String y = tokenizer.nextToken();
@@ -106,10 +172,6 @@ public class MainFragment extends Fragment {
                 i++;
 
             }
-            /*for (int j = 0; j < addresses.size(); j++) {
-                System.out.println(addresses.get(j));
-
-            }*/
         }
         else{
             Log.d("Mytag","Help");
@@ -117,6 +179,10 @@ public class MainFragment extends Fragment {
         i = 0;
         return headers;
 
+    }
+
+    public void passData( HashMap<String, List<String>> data) {
+        dataPasser.onDataPass(data);
     }
 
 }

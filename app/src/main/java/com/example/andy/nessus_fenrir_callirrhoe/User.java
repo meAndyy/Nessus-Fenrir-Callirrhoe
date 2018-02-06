@@ -14,17 +14,17 @@ public class User {
     public String name;
     public String  phone;
     public String email;
-    public Contacts farenger;
     public HashMap<String,Object> contacts = new HashMap<String,Object>();
-    public HashMap<String,List<String>> extdcontacts = new HashMap<String,List<String>>();
 
     public User(){}
 
-    public User(Contacts farenger){
-        this.farenger = farenger;
+    public User(String name, String phone, String email){
+
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
 
     }
-
     public User(String name, String phone, String email,HashMap list){
 
         this.name = name;
@@ -33,13 +33,6 @@ public class User {
         this.contacts = list;
 
     }
-    public HashMap<String,List<String>>getMap(){
-        for(String key : extdcontacts.keySet()) {
-            System.out.println("??????????????????????????????????"+key+"?????????????????????????????????");
-        }
-        return extdcontacts;
-    }
-
 
     public Map<String, Object> toMap(String groupname, ArrayList<String> contacts) {
         HashMap<String, Object> result = new HashMap<>();

@@ -83,9 +83,8 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                HashMap<String,String> map = new HashMap<String, String>();
-                map.put("contact"," ");
-                 final User user = new User(mname, mphone, memail, map);
+
+                 final User user = new User(mname, mphone, memail);
                 progressBar.setVisibility(View.VISIBLE);
                 //create user
                 auth.createUserWithEmailAndPassword(memail, mpass)

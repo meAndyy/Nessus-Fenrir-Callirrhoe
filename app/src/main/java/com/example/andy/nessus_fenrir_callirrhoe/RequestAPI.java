@@ -22,7 +22,7 @@ public class RequestAPI extends BroadcastReceiver {
 
 
     }
-    public void sendData() {
+    public void sendData(String email) {
 
         try {
             String jsonResponse;
@@ -37,12 +37,19 @@ public class RequestAPI extends BroadcastReceiver {
             con.setRequestProperty("Authorization", "Basic NDhjZGY1NTEtOGUxZC00ZmY0LTlhZjktYjlkMzYxMjBhNjli");
             con.setRequestMethod("POST");
 
-            String strJsonBody = "{"
+            /*String strJsonBody = "{"
                     +   "\"app_id\": \"47cc7bc4-8d85-4368-b00c-02d4341db977\","
                     +   "\"include_player_ids\": [\"a6843498-cd7b-433c-a740-af3c15af6e3f\",\"9\"],"
                     +   "\"data\": {\"foo\": \"bar\"},"
                     +   "\"contents\": {\"en\": \"Your friend has tapped in!" +
                     "\"}"
+                    + "}";*/
+
+            String strJsonBody = "{"
+                    +   "\"app_id\": \"47cc7bc4-8d85-4368-b00c-02d4341db977\","
+                    +   "\"filters\": [{\"field\": \"tag\", \"key\": \"UserID\", \"relation\": \"=\", \"value\": \""+email+"\"}],"
+                    +   "\"data\": {\"foo\": \"bar\"},"
+                    +   "\"contents\": {\"en\": \"BIG CALI KUSH DER 2GM FOR 50 TOP OF THE POPS\"}"
                     + "}";
 
 
