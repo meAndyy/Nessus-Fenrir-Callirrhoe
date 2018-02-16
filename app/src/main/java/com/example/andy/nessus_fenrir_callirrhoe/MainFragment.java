@@ -66,11 +66,13 @@ public class MainFragment extends Fragment {
         dbc = new DatabaseController();
         String uid = dbc.getUid();
         txtv =(TextView)v.findViewById(R.id.txtv);
-        txtv.setText(uid);
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        String s = sharedPref.getString("curr_contact","DEFAULT");
+        txtv.setText(s);
         list = (ExpandableListView)v.findViewById(R.id.list);
        /* dbr.child("users").child(uid).child("contacts").addValueEventListener(new ValueEventListener() */
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("contacts");
+       final  DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("contacts");
         ref.addValueEventListener(
                 new ValueEventListener() {
                     @Override
@@ -92,6 +94,7 @@ public class MainFragment extends Fragment {
                     public void onCancelled(DatabaseError databaseError) {
                         //handle databaseError
                     }
+
                 });
 
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -130,7 +133,6 @@ public class MainFragment extends Fragment {
                 adb.setPositiveButton("Sure", new AlertDialog.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         txtv.setText(curr);
-                        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
                         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString("curr_contact",curr);

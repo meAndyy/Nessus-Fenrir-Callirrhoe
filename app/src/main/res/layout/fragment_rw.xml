@@ -10,17 +10,8 @@
         android:id="@+id/valueNfc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/Logout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="29dp"
-        android:text="Tap Tag to Get Started" />
-
-    <Button
-        android:id="@+id/Logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="139dp"
-        android:text="Logout"
+        android:layout_marginBottom="244dp"
+        android:text="Tap Tag to Get Started"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 

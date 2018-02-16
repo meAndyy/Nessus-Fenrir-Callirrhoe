@@ -27,7 +27,6 @@ public class RWFragment extends Fragment {
     Tag myTag;
     boolean check;
 
-    Button logout, btnCheck;
     TextView valueNfc;
 
     public RWFragment() {
@@ -43,21 +42,6 @@ public class RWFragment extends Fragment {
         nfcMger = new NFCmanager(getActivity());
         check = false;
         valueNfc = (TextView)v.findViewById(R.id.valueNfc);
-        logout = (Button) v.findViewById(R.id.Logout);
-        final FirebaseAuth auth = FirebaseAuth.getInstance();
-
-
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                auth.signOut();
-                if(auth.getCurrentUser() == null){
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                }
-            }
-        });
-
 
         if (nfcMger.isCheck()){
             valueNfc.setText(nfcMger.getText());

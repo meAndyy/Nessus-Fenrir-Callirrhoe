@@ -7,6 +7,9 @@ package com.example.andy.nessus_fenrir_callirrhoe;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -25,8 +28,9 @@ public class RequestAPI extends BroadcastReceiver {
     public void sendData(String email) {
 
         try {
+            String curremail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
             String jsonResponse;
-
+            String message = "Your friend "+curremail+" has tapped in!";
             URL url = new URL("https://onesignal.com/api/v1/notifications");
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setUseCaches(false);
@@ -48,8 +52,8 @@ public class RequestAPI extends BroadcastReceiver {
             String strJsonBody = "{"
                     +   "\"app_id\": \"47cc7bc4-8d85-4368-b00c-02d4341db977\","
                     +   "\"filters\": [{\"field\": \"tag\", \"key\": \"UserID\", \"relation\": \"=\", \"value\": \""+email+"\"}],"
-                    +   "\"data\": {\"foo\": \"bar\"},"
-                    +   "\"contents\": {\"en\": \"BIG CALI KUSH DER 2GM FOR 50 TOP OF THE POPS\"}"
+                    +   "\"data\": {\"foo\": \""+email+"\"},"
+                    +   "\"contents\": {\"en\": \""+message+"\"}"
                     + "}";
 
 

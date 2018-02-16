@@ -7,12 +7,18 @@ package com.example.andy.nessus_fenrir_callirrhoe;
 import java.util.HashMap;
 import java.util.List;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ExpandAdapter extends BaseExpandableListAdapter {
 
@@ -85,6 +91,9 @@ public class ExpandAdapter extends BaseExpandableListAdapter {
         }
         TextView listTitleTextView = (TextView) convertView
                 .findViewById(R.id.listTitle);
+        final String key = listTitleTextView.getText().toString();
+        final CheckBox chkbox = (CheckBox) convertView.findViewById(R.id.checkBox);
+        chkbox.setFocusable(false);//fixed the button problem overlapping dropdown problem.
         listTitleTextView.setTypeface(null, Typeface.BOLD);
         listTitleTextView.setText(listTitle);
         return convertView;

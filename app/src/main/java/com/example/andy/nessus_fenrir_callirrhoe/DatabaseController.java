@@ -11,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,9 +43,13 @@ public class DatabaseController {
 
     protected void createUserInDatabase(User user){
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-
         mDatabase.child("users").child(uid).setValue(user);
+    }
+
+    protected void createLogInDatabase(LogHolder logHolder){
+
+        mDatabase.child("log").child(uid).push().setValue(logHolder);
+        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx CRITICAL SENTTTTTTTTTTT");
     }
 
     protected void addContacts(String groupname, ArrayList<String> contacts){
@@ -64,6 +69,16 @@ public class DatabaseController {
 
         mDatabase.child("users").child(uid).child("contacts").child(del).removeValue();
     }
+
+    /*protected void addToLog(){
+        mDatabase.child("log").push().getKey();
+        User user = new User();
+        Date date = new Date();
+        Map<String,Object> map = user.toMap("msg", date.toString());
+        Map<String,Object> updates = new HashMap<>();
+        updates.put("/users/"+uid+groupname,map);
+        mDatabase.updateChildren(updates);
+    }*/
 
 
 

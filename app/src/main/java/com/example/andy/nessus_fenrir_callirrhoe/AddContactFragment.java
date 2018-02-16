@@ -2,11 +2,16 @@ package com.example.andy.nessus_fenrir_callirrhoe;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -18,9 +23,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
-public class AddContactFragment extends Fragment {
+public class AddContactFragment extends AppCompatActivity {
 
     EditText ctext, ntext;
     TextView viewgrp;
@@ -34,19 +41,20 @@ public class AddContactFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_add_contact, container, false);
-
-        ctext = (EditText) v.findViewById(R.id.ctext);
-        crtebtn = (Button) v.findViewById(R.id.crtebtn);
-        addbtn = (Button) v.findViewById(R.id.addbtn);
-        grpbtn = (Button) v.findViewById(R.id.grpbtn);
-        ntext = (EditText) v.findViewById(R.id.ntext);
-        viewgrp = (TextView) v.findViewById(R.id.viewgrp);
-        list = (ListView) v.findViewById(R.id.list);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_add_contact);
+        ctext = (EditText) findViewById(R.id.ctext);
+        crtebtn = (Button) findViewById(R.id.crtebtn);
+        addbtn = (Button) findViewById(R.id.addbtn);
+        grpbtn = (Button) findViewById(R.id.grpbtn);
+        ntext = (EditText) findViewById(R.id.ntext);
+        viewgrp = (TextView) findViewById(R.id.viewgrp);
+        list = (ListView) findViewById(R.id.list);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         contacts = new ArrayList<>();
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, contacts);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contacts);
         list.setAdapter(adapter);
 
         grpbtn.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +68,7 @@ public class AddContactFragment extends Fragment {
 
                 }
                 else {
-                    Toast.makeText(getActivity(),"Its empty!",Toast.LENGTH_SHORT).show();;
+                    Toast.makeText(getApplicationContext(),"Its empty!",Toast.LENGTH_SHORT).show();;
                 }
             }
         });
@@ -76,43 +84,43 @@ public class AddContactFragment extends Fragment {
                 }
 
                 else {
-                    Toast.makeText(getActivity(),"Its empty!",Toast.LENGTH_SHORT).show();;
+                    Toast.makeText(getApplicationContext(),"Its empty!",Toast.LENGTH_SHORT).show();;
                 }
 
             }
         });
 
         crtebtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String groupname = viewgrp.getText().toString().trim();
-                if( !contacts.isEmpty() && !groupname.contains(" ")) {
-                    final AlertDialog.Builder adb = new AlertDialog.Builder(v.getContext());
-                    adb.setTitle("Create Group");
-                    adb.setMessage("Are you sure you want to create this group? Doing so will overwrite any other group with the same name.");
-                    adb.setNegativeButton("Cancel", null);
-                    adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
+                                       @Override
+                                       public void onClick(View v) {
+                                           final String groupname = viewgrp.getText().toString().trim();
+                                           if( !contacts.isEmpty() && !groupname.contains(" ")) {
+                                               final AlertDialog.Builder adb = new AlertDialog.Builder(v.getContext());
+                                               adb.setTitle("Create Group");
+                                               adb.setMessage("Are you sure you want to create this group? Doing so will overwrite any other group with the same name.");
+                                               adb.setNegativeButton("Cancel", null);
+                                               adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
+                                                   public void onClick(DialogInterface dialog, int which) {
 
-                                DatabaseController dbc = new DatabaseController();
-                                dbc.addContacts(groupname, contacts);
-                                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                                Toast.makeText(getActivity(), groupname + " has been added to your contacts.", Toast.LENGTH_SHORT).show();
-                                ctext.setText("");
-                                ntext.setText("");
-                                viewgrp.setText("");
-                                contacts.clear();
+                                                       DatabaseController dbc = new DatabaseController();
+                                                       dbc.addContacts(groupname, contacts);
+                                                       System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                                                       Toast.makeText(getApplicationContext(), groupname + " has been added to your contacts.", Toast.LENGTH_SHORT).show();
+                                                       ctext.setText("");
+                                                       ntext.setText("");
+                                                       viewgrp.setText("");
+                                                       contacts.clear();
 
-                        }});
-                    adb.show();
-                }
-                else{
-                    Toast.makeText(getActivity(),"Bad group, check name for spaces.", Toast.LENGTH_LONG).show();
-                }
+                                                   }});
+                                               adb.show();
+                                           }
+                                           else{
+                                               Toast.makeText(getApplicationContext(),"Bad group, check name for spaces.", Toast.LENGTH_LONG).show();
+                                           }
 
-                }
+                                       }
 
-            }
+                                   }
 
         );
 
@@ -120,7 +128,7 @@ public class AddContactFragment extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                final AlertDialog.Builder adb = new AlertDialog.Builder(v.getContext());
+                final AlertDialog.Builder adb = new AlertDialog.Builder(getApplicationContext());
                 adb.setTitle("Remove");
                 adb.setMessage("Are you sure you want to remove this item from the group you are creating?");
                 final int positionToRemove = position;
@@ -137,14 +145,46 @@ public class AddContactFragment extends Fragment {
             }
         });
 
-        return v;
+
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId()){
+            case R.id.action_name:
+               /* AddContactFragment fragment = new AddContactFragment();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.add_frag, fragment);
+                transaction.commit();*/
+                final FirebaseAuth auth = FirebaseAuth.getInstance();
+                if(auth.getCurrentUser() != null){
+                    auth.signOut();
+                    startActivity(new Intent(AddContactFragment.this, LoginActivity.class));
+                    finish();
+                }
+                break;
+
+            case R.id.action_back:
+                    startActivity(new Intent(AddContactFragment.this, NFCActivity.class));
+                    finish();
+
+        }
+        return true;
+    }
+
 
     public void hideKeyboard() {
         // Check if no view has focus:
-        View view = getActivity().getCurrentFocus();
+        View view = this.getCurrentFocus();
         if (view != null) {
-            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }

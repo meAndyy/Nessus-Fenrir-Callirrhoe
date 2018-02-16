@@ -24,7 +24,7 @@ public class TabAdapter extends FragmentPagerAdapter {
                 return new RWFragment();
             case 2:
 
-                return new AddContactFragment();
+                return new LogFragment();
 
         }
 
@@ -40,7 +40,7 @@ public class TabAdapter extends FragmentPagerAdapter {
             default:
                 return "Tag";
             case 2:
-                return "Add Contacts";
+                return "Log";
 
 
         }

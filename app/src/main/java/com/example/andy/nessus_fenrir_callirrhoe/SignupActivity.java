@@ -19,6 +19,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
@@ -85,6 +89,8 @@ public class SignupActivity extends AppCompatActivity {
                 }
 
                  final User user = new User(mname, mphone, memail);
+
+                final LogHolder logholder = new LogHolder(mname, "");
                 progressBar.setVisibility(View.VISIBLE);
                 //create user
                 auth.createUserWithEmailAndPassword(memail, mpass)
@@ -100,6 +106,7 @@ public class SignupActivity extends AppCompatActivity {
                                 } else {
                                     DatabaseController dbc = new DatabaseController();
                                     dbc.createUserInDatabase(user);
+                                    dbc.createLogInDatabase(logholder);
                                     startActivity(new Intent(SignupActivity.this, NFCActivity.class));
                                     finish();
                                 }
