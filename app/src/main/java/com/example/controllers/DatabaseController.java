@@ -1,19 +1,14 @@
 package com.example.andy.nessus_fenrir_callirrhoe;
 
-import android.util.Log;
-
+import com.example.models.LogHolder;
+import com.example.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,9 +16,9 @@ import java.util.Map;
  */
 
 public class DatabaseController {
-    protected FirebaseUser currentFirebaseUser;
-    protected DatabaseReference mDatabase;
-    protected FirebaseAuth auth;
+    public FirebaseUser currentFirebaseUser;
+    public DatabaseReference mDatabase;
+    public FirebaseAuth auth;
     String uid;
 
 
@@ -41,18 +36,18 @@ public class DatabaseController {
     }
 
 
-    protected void createUserInDatabase(User user){
+     public void createUserInDatabase(User user){
 
         mDatabase.child("users").child(uid).setValue(user);
     }
 
-    protected void createLogInDatabase(LogHolder logHolder){
+    public void createLogInDatabase(LogHolder logHolder){
 
         mDatabase.child("log").child(uid).push().setValue(logHolder);
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx CRITICAL SENTTTTTTTTTTT");
     }
 
-    protected void addContacts(String groupname, ArrayList<String> contacts){
+    public void addContacts(String groupname, ArrayList<String> contacts){
 
         mDatabase.child("users").push().getKey();
         User user = new User();
@@ -65,12 +60,12 @@ public class DatabaseController {
     }
 
 
-    protected void deleteData(String del){
+    public void deleteData(String del){
 
         mDatabase.child("users").child(uid).child("contacts").child(del).removeValue();
     }
 
-    /*protected void addToLog(){
+    /*public void addToLog(){
         mDatabase.child("log").push().getKey();
         User user = new User();
         Date date = new Date();
@@ -82,11 +77,11 @@ public class DatabaseController {
 
 
 
-    protected String getUid(){
+    public String getUid(){
         return uid;
     }
 
-    protected DatabaseReference getDatabase(){
+    public DatabaseReference getDatabase(){
         return mDatabase;
     }
 

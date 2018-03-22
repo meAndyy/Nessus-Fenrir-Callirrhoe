@@ -1,8 +1,12 @@
-package com.example.andy.nessus_fenrir_callirrhoe;
+package adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.example.fragments.LogFragment;
+import com.example.fragments.MainFragment;
+import com.example.fragments.RWFragment;
 
 /**
  * Created by Andy on 11/12/2017.

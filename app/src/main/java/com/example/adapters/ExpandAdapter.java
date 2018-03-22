@@ -1,4 +1,4 @@
-package com.example.andy.nessus_fenrir_callirrhoe;
+package adapters;
 
 /**
  * Created by Andy on 26/01/2018.
@@ -7,18 +7,15 @@ package com.example.andy.nessus_fenrir_callirrhoe;
 import java.util.HashMap;
 import java.util.List;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.andy.nessus_fenrir_callirrhoe.R;
 
 public class ExpandAdapter extends BaseExpandableListAdapter {
 
