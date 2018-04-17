@@ -16,6 +16,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.example.controllers.DatabaseController;
+import com.example.controllers.NFCmanager;
+import com.example.controllers.RequestAPI;
+import com.example.fragments.AddContactFragment;
+import com.example.fragments.LogFragment;
+import com.example.fragments.MainFragment;
+import com.example.models.LogHolder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.onesignal.OneSignal;
@@ -26,19 +34,23 @@ import java.util.List;
 import java.util.Map;
 import android.support.design.widget.TabLayout;
 
+import com.example.adapters.TabAdapter;
+
 
 public class NFCActivity extends AppCompatActivity implements MainFragment.OnDataPass {
 
-    private NdefMessage message = null;
+    protected NdefMessage message = null;
 
-    private NFCmanager nfcMger;
+    protected NFCmanager nfcMger;
     Tag myTag;
     private ViewPager pager;
     private TabAdapter adapter;
-    private Toolbar toolbar;
+    public Toolbar toolbar;
     private TabLayout tabLayout;
     String[] sendlist;
     String usremail;
+    String uid;
+    FirebaseUser currentFirebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +73,9 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
         sendlist = new  String[10];
 
 
-        final FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        uid= currentFirebaseUser.getUid();
         usremail = currentFirebaseUser.getEmail();
-        OneSignal.syncHashedEmail(usremail);
         OneSignal.sendTag("UserID",usremail);
 
         if(currentFirebaseUser != null) {
@@ -76,6 +88,8 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
                 e.printStackTrace();
             }
         }
+
+       pager.setCurrentItem(1);
     }
 
     @Override
@@ -89,10 +103,7 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
 
         switch(item.getItemId()){
             case R.id.action_name:
-               /* AddContactFragment fragment = new AddContactFragment();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.add_frag, fragment);
-                transaction.commit();*/
+
                 final FirebaseAuth auth = FirebaseAuth.getInstance();
 
                 if(auth.getCurrentUser() != null){
@@ -106,7 +117,16 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
             case R.id.action_add:
                 startActivity(new Intent(NFCActivity.this, AddContactFragment.class));
                 finish();
+                break;
 
+            case R.id.action_write:
+                startActivity(new Intent(NFCActivity.this, WriteTagActivity.class));
+                finish();
+                break;
+
+            case R.id.action_read:
+                startActivity(new Intent(NFCActivity.this, ReadActivty.class));
+                finish();
         }
         return true;
     }
@@ -142,29 +162,26 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
     @Override
     public void onNewIntent(Intent intent) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        if(auth.getCurrentUser() != null) {
+        if(auth.getCurrentUser() == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+        }
             myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NdefMessage[] m = nfcMger.readFromIntent(intent);
             String s = nfcMger.buildTagViews(m);
             Toast.makeText(this, "Tag value is " + s, Toast.LENGTH_LONG).show();
-           // RequestAPI api = new RequestAPI();
+
 
             for(int i = 0; i < sendlist.length;i++) {
                 System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"+sendlist);
 
             }
-            new apiThread().execute(sendlist);
-            /*if (message != null) {
-                nfcMger.writeTag(myTag, message);
-                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                Toast.makeText(this, "User Info Loaded", Toast.LENGTH_SHORT).show();
-                check = false;
-            } else {
 
-            }*/
-        }
+            if(s.equals(uid) || s.equals("APOMDEFAULTVALUE")){
+                new apiThread().execute(sendlist);
+            }
+
         else{
-            startActivity(new Intent(this, LoginActivity.class));
+                Toast.makeText(this, "This is someone elses tag. You'll need their permission to override it.", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -186,9 +203,8 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
             }
 
         }
-        String[] countries = currconlist.toArray(new String[currconlist.size()]);
 
-            return countries;
+        return currconlist.toArray(new String[currconlist.size()]);
         }
 
 
@@ -204,29 +220,29 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
 
     }
 
-    private class apiThread extends AsyncTask<String,Void,String>{
+    protected class apiThread extends AsyncTask<String,Void,Boolean>{
         @Override
-        protected String doInBackground(String... params) {
+        protected Boolean doInBackground(String... params) {
             DatabaseController dbc = new DatabaseController();
 
             for (int i = 0; i < params.length; i++) {
                 String playerid = params[i];
-                System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ"+playerid);
                 playerid.trim();
                 RequestAPI api = new RequestAPI();
-                try {
-                    api.sendData(playerid);
-                    LogHolder logholder = new LogHolder(usremail,"Outbound");
+                Boolean isSent = api.sendData(playerid);
+                if (isSent) {
+                    LogHolder logholder = new LogHolder(playerid, "Outbound");
                     dbc.createLogInDatabase(logholder);
-
+                    return true;
                 }
-                catch (Exception e){
-                    Toast.makeText(NFCActivity.this, "Message fail to send", Toast.LENGTH_SHORT).show();
+                else{
+                    Toast.makeText(NFCActivity.this, "Error sending try again", Toast.LENGTH_SHORT).show();
+                    return false;
                 }
-
             }
 
-            return "1";
+
+            return true;
         }
     }
 

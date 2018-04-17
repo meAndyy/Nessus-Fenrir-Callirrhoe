@@ -1,4 +1,4 @@
-package com.example.andy.nessus_fenrir_callirrhoe;
+package com.example.controllers;
 
 /**
  * Created by Andy on 24/01/2018.
@@ -7,7 +7,9 @@ package com.example.andy.nessus_fenrir_callirrhoe;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
+import com.example.andy.nessus_fenrir_callirrhoe.NFCActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.OutputStream;
@@ -25,11 +27,14 @@ public class RequestAPI extends BroadcastReceiver {
 
 
     }
-    public void sendData(String email) {
+    public boolean sendData(String email) {
 
         try {
             String curremail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
             String jsonResponse;
+            DatabaseController dbc = new DatabaseController();
+            String senderid = dbc.getSenderid();
+
             String message = "Your friend "+curremail+" has tapped in!";
             URL url = new URL("https://onesignal.com/api/v1/notifications");
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
@@ -41,18 +46,10 @@ public class RequestAPI extends BroadcastReceiver {
             con.setRequestProperty("Authorization", "Basic NDhjZGY1NTEtOGUxZC00ZmY0LTlhZjktYjlkMzYxMjBhNjli");
             con.setRequestMethod("POST");
 
-            /*String strJsonBody = "{"
-                    +   "\"app_id\": \"47cc7bc4-8d85-4368-b00c-02d4341db977\","
-                    +   "\"include_player_ids\": [\"a6843498-cd7b-433c-a740-af3c15af6e3f\",\"9\"],"
-                    +   "\"data\": {\"foo\": \"bar\"},"
-                    +   "\"contents\": {\"en\": \"Your friend has tapped in!" +
-                    "\"}"
-                    + "}";*/
-
             String strJsonBody = "{"
                     +   "\"app_id\": \"47cc7bc4-8d85-4368-b00c-02d4341db977\","
                     +   "\"filters\": [{\"field\": \"tag\", \"key\": \"UserID\", \"relation\": \"=\", \"value\": \""+email+"\"}],"
-                    +   "\"data\": {\"foo\": \""+email+"\"},"
+                    +   "\"data\": {\"foo\": \""+senderid+"\"},"
                     +   "\"contents\": {\"en\": \""+message+"\"}"
                     + "}";
 
@@ -73,6 +70,7 @@ public class RequestAPI extends BroadcastReceiver {
                 Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
                 jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
                 scanner.close();
+
             }
             else {
                 Scanner scanner = new Scanner(con.getErrorStream(), "UTF-8");
@@ -84,7 +82,7 @@ public class RequestAPI extends BroadcastReceiver {
         } catch(Throwable t) {
             t.printStackTrace();
         }
-
+        return true;
 
     }
 

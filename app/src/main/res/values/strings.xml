@@ -7,8 +7,12 @@
     <string name="login">Login</string>
     <string name="back">Back</string>
     <string name="reset">Reset</string>
+    <string name="write">Write: Using this option means everyone can use this tag to send messages.</string>
+    <string name="safewrite">Safe Write: Locks the tag so that only you can use this.</string>
+    <string name="erase">Erase: Wipe a tag to start again. If a tag uses safe write mode, the owner must erase with their own device.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_write_tag">WriteTagActivity</string>
 
 </resources>

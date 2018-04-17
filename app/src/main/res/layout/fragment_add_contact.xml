@@ -3,7 +3,8 @@
     android:id="@+id/add_frag"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.andy.nessus_fenrir_callirrhoe.AddContactFragment">
+    tools:context="com.example.andy.nessus_fenrir_callirrhoe.com.example.fragments.AddContactFragment"
+    android:background="@drawable/repeat_background">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -13,6 +14,18 @@
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorPrimary"/>
+
+    <EditText
+        android:id="@+id/ntext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ctext"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/ctext"
+        android:layout_marginTop="70dp"
+        android:ems="10"
+        android:hint="Group Name"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/ctext"
@@ -28,6 +41,17 @@
         android:inputType="textEmailAddress" />
 
     <Button
+        android:id="@+id/grpbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ntext"
+        android:layout_alignLeft="@+id/addbtn"
+        android:layout_alignStart="@+id/addbtn"
+        android:layout_alignTop="@+id/ntext"
+        android:background="@drawable/button_shape"
+        android:text="Add" />
+
+    <Button
         android:id="@+id/addbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,21 +59,20 @@
         android:layout_marginLeft="18dp"
         android:layout_marginStart="18dp"
         android:layout_marginTop="14dp"
-        android:layout_toEndOf="@+id/ntext"
         android:layout_toRightOf="@+id/ntext"
-        android:text="Add" />
+        android:text="Add"
+        android:background="@drawable/button_shape"
+        />
 
-    <EditText
-        android:id="@+id/ntext"
+    <Button
+        android:id="@+id/crtebtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ctext"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/ctext"
-        android:layout_marginTop="70dp"
-        android:ems="10"
-        android:hint="Group Name"
-        android:inputType="textPersonName" />
+        android:background="@drawable/button_shape"
+        android:text="create"
+        android:layout_below="@+id/addbtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp" />
 
     <TextView
         android:id="@+id/viewgrp"
@@ -58,16 +81,8 @@
         android:layout_below="@+id/crtebtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="18dp"
-        android:textSize="18sp" />
-
-    <Button
-        android:id="@+id/grpbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ntext"
-        android:layout_alignLeft="@+id/addbtn"
-        android:layout_alignStart="@+id/addbtn"
-        android:text="Add" />
+        android:textSize="18sp"
+        android:background="@drawable/button_shape"/>
 
     <ListView
         android:id="@+id/list"
@@ -78,15 +93,6 @@
         android:layout_below="@+id/viewgrp"
         android:layout_marginTop="46dp"
         android:longClickable="true" />
-
-    <Button
-        android:id="@+id/crtebtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/addbtn"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="19dp"
-        android:text="create" />
 
 
 </RelativeLayout>

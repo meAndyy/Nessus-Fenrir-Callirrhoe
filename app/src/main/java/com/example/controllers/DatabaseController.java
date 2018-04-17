@@ -1,4 +1,4 @@
-package com.example.andy.nessus_fenrir_callirrhoe;
+package com.example.controllers;
 
 import com.example.models.LogHolder;
 import com.example.models.User;
@@ -15,11 +15,12 @@ import java.util.Map;
  * Created by Andy on 25/01/2018.
  */
 
-public class DatabaseController {
+    public class DatabaseController {
     public FirebaseUser currentFirebaseUser;
     public DatabaseReference mDatabase;
     public FirebaseAuth auth;
     String uid;
+    String senderid;
 
 
     public DatabaseController(){
@@ -30,6 +31,7 @@ public class DatabaseController {
         currentFirebaseUser = auth.getCurrentUser();
         if(auth.getCurrentUser() != null) {
             uid = currentFirebaseUser.getUid();
+            senderid = currentFirebaseUser.getEmail();
 
         }
 
@@ -57,6 +59,10 @@ public class DatabaseController {
         mDatabase.updateChildren(updates);
 
 
+    }
+
+    public String getSenderid(){
+        return senderid;
     }
 
 

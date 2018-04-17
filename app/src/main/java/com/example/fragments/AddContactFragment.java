@@ -1,19 +1,15 @@
-package com.example.andy.nessus_fenrir_callirrhoe;
+package com.example.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,6 +19,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.controllers.DatabaseController;
+import com.example.andy.nessus_fenrir_callirrhoe.LoginActivity;
+import com.example.andy.nessus_fenrir_callirrhoe.NFCActivity;
+import com.example.andy.nessus_fenrir_callirrhoe.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public class AddContactFragment extends AppCompatActivity {
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = ctext.getText().toString().trim();
+                String email = ctext.getText().toString().trim().toLowerCase();
                 if (!email.isEmpty()&& !email.contains(" ") ){
                     contacts.add(email);
                     ctext.setText("");
@@ -93,8 +93,8 @@ public class AddContactFragment extends AppCompatActivity {
         crtebtn.setOnClickListener(new View.OnClickListener() {
                                        @Override
                                        public void onClick(View v) {
-                                           final String groupname = viewgrp.getText().toString().trim();
-                                           if( !contacts.isEmpty() && !groupname.contains(" ")) {
+                                           final String groupname = viewgrp.getText().toString().trim().toLowerCase();
+                                           if( !contacts.isEmpty() && !groupname.isEmpty()) {
                                                final AlertDialog.Builder adb = new AlertDialog.Builder(v.getContext());
                                                adb.setTitle("Create Group");
                                                adb.setMessage("Are you sure you want to create this group? Doing so will overwrite any other group with the same name.");
@@ -104,7 +104,6 @@ public class AddContactFragment extends AppCompatActivity {
 
                                                        DatabaseController dbc = new DatabaseController();
                                                        dbc.addContacts(groupname, contacts);
-                                                       System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                                        Toast.makeText(getApplicationContext(), groupname + " has been added to your contacts.", Toast.LENGTH_SHORT).show();
                                                        ctext.setText("");
                                                        ntext.setText("");

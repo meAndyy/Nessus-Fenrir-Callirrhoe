@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_read"
+
+        android:icon="@drawable/ic_action_read"
+        android:title="Item"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_name"
         android:title="Log Out"
         android:icon="@drawable/ic_action_name"
@@ -10,9 +16,14 @@
         />
 
     <item
+        android:id="@+id/action_write"
+        android:icon="@mipmap/ic_action_write"
+        android:title="Write Tag"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_add"
+        android:icon="@mipmap/ic_action_add"
         android:title="Add Contact"
-        android:icon="@drawable/ic_action_add"
-        app:showAsAction="always"
-        />
+        app:showAsAction="always" />
+
 </menu>

@@ -1,4 +1,4 @@
-package adapters;
+package com.example.adapters;
 
 /**
  * Created by Andy on 26/01/2018.
@@ -88,9 +88,6 @@ public class ExpandAdapter extends BaseExpandableListAdapter {
         }
         TextView listTitleTextView = (TextView) convertView
                 .findViewById(R.id.listTitle);
-        final String key = listTitleTextView.getText().toString();
-        final CheckBox chkbox = (CheckBox) convertView.findViewById(R.id.checkBox);
-        chkbox.setFocusable(false);//fixed the button problem overlapping dropdown problem.
         listTitleTextView.setTypeface(null, Typeface.BOLD);
         listTitleTextView.setText(listTitle);
         return convertView;

@@ -3,7 +3,7 @@
     android:id="@+id/main_frag"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.andy.nessus_fenrir_callirrhoe.MainFragment">
+    tools:context="com.example.andy.nessus_fenrir_callirrhoe.com.example.fragments.MainFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -23,5 +23,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="122dp"
-        android:text="TextView" />
+        android:text=""
+        android:background="@drawable/button_shape"/>
 </RelativeLayout>

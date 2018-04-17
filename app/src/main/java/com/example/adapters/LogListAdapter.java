@@ -1,4 +1,4 @@
-package adapters;
+package com.example.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -51,7 +51,8 @@ public class LogListAdapter extends ArrayAdapter<LogHolder> implements View.OnCl
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        LogHolder logHolder = getItem(position);
+        int backward = super.getCount() - position -1;
+        LogHolder logHolder = getItem(backward);
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
 

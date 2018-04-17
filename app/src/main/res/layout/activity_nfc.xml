@@ -2,7 +2,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:background="@drawable/repeat_background"
+    >
+
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

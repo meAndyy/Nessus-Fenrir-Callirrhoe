@@ -1,4 +1,4 @@
-package adapters;
+package com.example.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -39,10 +39,10 @@ public class TabAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "Home";
+                return "Contacts";
             case 1:
             default:
-                return "Tag";
+                return "Home";
             case 2:
                 return "Log";
 

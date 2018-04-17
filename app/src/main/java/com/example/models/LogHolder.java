@@ -1,4 +1,4 @@
-package com.example.andy.nessus_fenrir_callirrhoe;
+package com.example.models;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -13,11 +13,6 @@ public class LogHolder {
 
     String name;
     String date;
-
-    public String getStatus() {
-        return status;
-    }
-
     String status;
 
     public LogHolder(){}
@@ -36,6 +31,17 @@ public class LogHolder {
 
     public String getName() {
         return name;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void empty(){
+        this.name = null;
+        this. date = null;
+        this.status = null;
+
     }
 
 }

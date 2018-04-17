@@ -6,14 +6,11 @@
     android:layout_height="match_parent"
     tools:context="com.example.andy.nessus_fenrir_callirrhoe.NFCActivity">
 
-    <TextView
-        android:id="@+id/valueNfc"
+    <ImageView
+        android:id="@+id/imageView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="244dp"
-        android:text="Tap Tag to Get Started"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/homescrren_final" />
 </RelativeLayout>
 

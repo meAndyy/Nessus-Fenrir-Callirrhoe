@@ -1,23 +1,16 @@
-package com.example.andy.nessus_fenrir_callirrhoe;
+package com.example.fragments;
 
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.nfc.NdefMessage;
-import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.io.UnsupportedEncodingException;
+import com.example.controllers.NFCmanager;
+import com.example.andy.nessus_fenrir_callirrhoe.R;
 
 
 public class RWFragment extends Fragment {
@@ -41,10 +34,10 @@ public class RWFragment extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_rw, container, false);
         nfcMger = new NFCmanager(getActivity());
         check = false;
-        valueNfc = (TextView)v.findViewById(R.id.valueNfc);
+        //valueNfc = (TextView)v.findViewById(R.id.valueNfc);
 
         if (nfcMger.isCheck()){
-            valueNfc.setText(nfcMger.getText());
+          //  valueNfc.setText(nfcMger.getText());
         }
 
         return v;
