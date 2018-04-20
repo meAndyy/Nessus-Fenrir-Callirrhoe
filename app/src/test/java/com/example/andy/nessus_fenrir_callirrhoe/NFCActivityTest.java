@@ -33,17 +33,12 @@ public class NFCActivityTest {
     private NFCmanager nfcMger;
     @Mock
     private SharedPreferences pref;
+
     @Mock
     private Context context;
 
     @Mock
     private HashMap init;
-
-    @Mock
-    private RequestAPI api;
-
-    @Mock
-    private Intent intent;
 
     @InjectMocks
     private NFCActivity activity;
@@ -53,8 +48,6 @@ public class NFCActivityTest {
         this.init = Mockito.mock(HashMap.class);
         this.pref = Mockito.mock(SharedPreferences.class);
         this.context = Mockito.mock(Context.class);
-        this.api = Mockito.mock(RequestAPI.class);
-        this.intent = Mockito.mock(Intent.class);
         Mockito.when(context.getSharedPreferences(anyString(), anyInt())).thenReturn(pref);
     }
 
@@ -62,10 +55,8 @@ public class NFCActivityTest {
     public void testToList(){
 
         NFCActivity test = mock(NFCActivity.class);
-        //HashMap<String, List<String>> init = new HashMap<>();
         List<String> list = new ArrayList<>();
         String[] s = {"dud@hotmail.com","dud1@hotmail.com","dud2@hotmail.com","dud3@hotmail.com"};
-
         HashMap<String, List<String>> map = init;
         for(int i = 0; i < s.length;i++){
            list.add(s[i]);
@@ -79,11 +70,4 @@ public class NFCActivityTest {
         assertArrayEquals(test.toList(map), eq(s));
     }
 
-    @Test
-    public void testSendData(){
-        NFCActivity test = mock(NFCActivity.class);
-        
-        assertThat(test.onNewIntent(intent), is(true));
-
-    }
 }

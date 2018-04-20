@@ -1,6 +1,7 @@
 package com.example.controllers;
 
 import com.example.models.LogHolder;
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -16,46 +17,37 @@ import java.util.Date;
 
 public class GraphController {
 
-    Date today;
-    Date fourdays;
-    public GraphController(){
+    private int day0 ;
+    private int day1;
+    private int day2;
+    private int day3;
+    private int day4;
+    private Date d4;
+    private Date d3;
+    private Date d2;
+    private Date d1;
+    private Date d0;
 
-        Calendar calendar = Calendar.getInstance();
-        today = calendar.getTime();
-        calendar.add(Calendar.DATE, -1);
-        fourdays = calendar.getTime();
-        calendar.add(Calendar.DATE, -3);
-    }
-
-    public LineGraphSeries<DataPoint>  parseTime(ArrayList<LogHolder> times ){
-        int day0 = 0;
-        int day1 = 0;
-        int day2 = 0;
-        int day3 = 0;
-        int day4 = 0;
+    public GraphController(ArrayList<LogHolder> times){
+        day0 = 0;
+        day1 = 0;
+        day2 = 0;
+        day3 = 0;
+        day4 = 0;
         SimpleDateFormat parser = new SimpleDateFormat("dd-MMM-yyyy  HH:mm ");
 
         Calendar calendar = Calendar.getInstance();
-       // calendar.add(Calendar.HOUR_OF_DAY,12);
-        Date d4 = calendar.getTime();
+        calendar.add(Calendar.DATE, +1);
+        d4 = calendar.getTime();
         calendar.add(Calendar.DATE, -1);
-        Date d3 = calendar.getTime();
+        d3 = calendar.getTime();
         calendar.add(Calendar.DATE, -1);
-        Date d2 = calendar.getTime();
+        d2 = calendar.getTime();
         calendar.add(Calendar.DATE,-1);
-        Date d1 = calendar.getTime();
+        d1 = calendar.getTime();
         calendar.add(Calendar.DATE,-1);
-        Date d0 = calendar.getTime();
+        d0 = calendar.getTime();
         calendar.add(Calendar.DATE,-1);
-
-       /* LineGraphSeries<DataPoint>  series = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(d0, day0),
-                new DataPoint(d1, day1),
-                new DataPoint(d2, day2),
-                new DataPoint(d3, day3),
-                new DataPoint(d4, day4)
-        });*/
-
 
         for (int i = 0; i <  times.size();i++){
             LogHolder lh = times.get(i);
@@ -82,14 +74,14 @@ public class GraphController {
             catch (ParseException e){
                 e.printStackTrace();
             }
-            System.out.println("$$$$$$$$$"+day0);
-            System.out.println("$$$$$$$$$"+day1);
-            System.out.println("$$$$$$$$$"+day2);
-            System.out.println("$$$$$$$$$"+day3);
-            System.out.println("$$$$$$$$$"+day4);
+
 
 
         }
+
+    }
+
+    public LineGraphSeries<DataPoint>  getLineGraph( ){
 
         LineGraphSeries<DataPoint> series  = new LineGraphSeries<>(new DataPoint[] {
                 new DataPoint(d0, day0),
@@ -99,7 +91,20 @@ public class GraphController {
                 new DataPoint(d4, day4)
         });
 
+        System.out.println("$$$$$$$$$*"+day0+""+d0);
+        System.out.println("$$$$$$$$$*"+day1+""+d1);
+        System.out.println("$$$$$$$$$*"+day2+""+d2);
+        System.out.println("$$$$$$$$$*"+day3+""+d3);
+        System.out.println("$$$$$$$$$*"+day4+""+d4);
+
         return series;
     }
 
+    public int getBarGraph( ){
+
+        int sum = day0 + day1 + day2 +day3 + day4;
+
+        return sum;
+
+    }
 }

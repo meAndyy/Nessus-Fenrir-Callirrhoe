@@ -71,24 +71,7 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
         pager.setAdapter(adapter);
         tabLayout.setupWithViewPager(pager);
         sendlist = new  String[10];
-
-
-         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        uid= currentFirebaseUser.getUid();
-        usremail = currentFirebaseUser.getEmail();
-        OneSignal.sendTag("UserID",usremail);
-
-        if(currentFirebaseUser != null) {
-            String s  = currentFirebaseUser.getUid();
-            try {
-                message = nfcMger.createRecord(s);
-            }
-            catch(UnsupportedEncodingException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
+        initRecord();
        pager.setCurrentItem(1);
     }
 
@@ -218,6 +201,27 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
         }
 
 
+    }
+
+    private void initRecord(){
+        currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentFirebaseUser != null) {
+            uid= currentFirebaseUser.getUid();
+            usremail = currentFirebaseUser.getEmail();
+            OneSignal.sendTag("UserID",usremail);
+            String s  = currentFirebaseUser.getUid();
+            try {
+                message = nfcMger.createRecord(s);
+            }
+            catch(UnsupportedEncodingException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else{
+            startActivity(new Intent(NFCActivity.this, LoginActivity.class));
+            finish();
+        }
     }
 
     protected class apiThread extends AsyncTask<String,Void,Boolean>{

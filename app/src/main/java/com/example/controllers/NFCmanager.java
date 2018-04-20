@@ -104,9 +104,7 @@ public class NFCmanager {
         System.arraycopy(textBytes, 0, payload, 1 + langLength, textLength);
 
         NdefRecord recordNFC = new NdefRecord(NdefRecord.TNF_WELL_KNOWN,  NdefRecord.RTD_TEXT,  new byte[0], payload);
-        NdefMessage msg = new NdefMessage(new NdefRecord[]{recordNFC});
-
-        return msg;
+        return new NdefMessage(new NdefRecord[]{recordNFC});
     }
 
     public NdefMessage[] readFromIntent(Intent intent) {

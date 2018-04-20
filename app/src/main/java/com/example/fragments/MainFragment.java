@@ -23,13 +23,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-
 import com.example.adapters.ExpandAdapter;
 
 
@@ -124,8 +122,8 @@ public class MainFragment extends Fragment {
         list.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                final String curr = (String)adapter.getGroup(groupPosition);//result.keySet().toArray()[groupPosition].toString();
 
-                final String curr = result.keySet().toArray()[groupPosition].toString();
                 final AlertDialog.Builder adb = new AlertDialog.Builder(v.getContext());
                 adb.setTitle("Set Up");
                 adb.setMessage("Would you like to make "+curr+" your current contact group?");
@@ -136,7 +134,7 @@ public class MainFragment extends Fragment {
                         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString("curr_contact",curr);
-                        editor.commit();
+                        editor.apply();
                         String s = sharedPref.getString("curr_contact","DEFAULT");
                         Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
                     }});
@@ -150,7 +148,7 @@ public class MainFragment extends Fragment {
         return v;
     }
 
-    private ArrayList<String> collectPhoneNumbers(Map<String,Object> users) {
+    public ArrayList<String> collectPhoneNumbers(Map<String,Object> users) {
 
         int i = 0;
         ArrayList<String> headers = new ArrayList<String>();
@@ -160,6 +158,7 @@ public class MainFragment extends Fragment {
                 ArrayList<String> addresses = new ArrayList<String>();
                 String s = entry.getKey();
                 String x = entry.getValue().toString();
+                System.out.println("********"+x);
                 StringTokenizer tokenizer = new StringTokenizer(x, ",");
                 while (tokenizer.hasMoreTokens()) {
                     String y = tokenizer.nextToken();

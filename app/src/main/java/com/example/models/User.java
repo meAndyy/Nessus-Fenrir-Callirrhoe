@@ -25,14 +25,6 @@ public class User {
         this.email = email;
 
     }
-    public User(String name, String phone, String email,HashMap list){
-
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.contacts = list;
-
-    }
 
     public Map<String, Object> toMap(String groupname, ArrayList<String> contacts) {
         HashMap<String, Object> result = new HashMap<>();

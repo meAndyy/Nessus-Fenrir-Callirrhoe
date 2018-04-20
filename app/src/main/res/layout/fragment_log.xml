@@ -17,35 +17,57 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/logtitle"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="344dp" />
+        android:layout_marginTop="30dp" />
 
     <Switch
         android:id="@+id/togglebtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="229dp"
-        android:layout_marginEnd="42dp"
-        android:layout_marginRight="42dp"
         android:checked="true"
         android:scaleX="1.5"
-        android:scaleY="1.5" />
+        android:scaleY="1.5"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/graphtitle"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="39dp"
+        android:layout_marginEnd="39dp" />
+
+    <Switch
+        android:id="@+id/togglebtn1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:layout_alignTop="@+id/graphtitle"
+        android:layout_alignLeft="@+id/togglebtn"
+        android:layout_alignStart="@+id/togglebtn" />
 
     <TextView
         android:id="@+id/logtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
         android:text="Received APOM's"
         android:textSize="30sp"
         android:layout_alignBaseline="@+id/togglebtn"
         android:layout_alignBottom="@+id/togglebtn"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignLeft="@+id/graph"
+        android:layout_alignStart="@+id/graph" />
+
+    <TextView
+        android:id="@+id/graphtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Series Graph"
+        android:textSize="30sp"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/logtitle"
+        android:layout_alignStart="@+id/logtitle"
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp" />
+
 </RelativeLayout>

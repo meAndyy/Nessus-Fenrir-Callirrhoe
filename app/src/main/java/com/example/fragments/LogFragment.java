@@ -23,6 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.Series;
@@ -44,10 +46,12 @@ public class LogFragment extends Fragment implements OneSignal.NotificationRecei
     ListView list;
     ArrayList<LogHolder> msgs;
     ArrayList<LogHolder> rcvd;
+    Switch togglebtn1;
     Switch togglebtn;
     LogListAdapter adapter;
     LogListAdapter radapter;
     TextView logtitle;
+    TextView graphtitle;
     GraphView graph;
 
     public LogFragment() {
@@ -62,7 +66,9 @@ public class LogFragment extends Fragment implements OneSignal.NotificationRecei
         list = (ListView) v.findViewById(R.id.list);
         togglebtn = (Switch) v.findViewById(R.id.togglebtn);
         logtitle = (TextView) v.findViewById(R.id.logtitle);
-        logtitle.setText("Received APOM's");
+        togglebtn1 = (Switch) v.findViewById(R.id.togglebtn1);
+        graphtitle = (TextView) v.findViewById(R.id.graphtitle);
+       // logtitle.setText("Received APOM's");
         msgs = new ArrayList<>();
         rcvd = new ArrayList<>();
         adapter = new LogListAdapter(msgs,getActivity());
@@ -78,12 +84,33 @@ public class LogFragment extends Fragment implements OneSignal.NotificationRecei
 
                     list.setAdapter(radapter);
                     logtitle.setText("Received APOM's");
+                   // setupGraph();
 
                 }
                 if (!togglebtn.isChecked()){
 
                     list.setAdapter(adapter);
                     logtitle.setText("Sent APOM's");
+                    //setupBarGraph();
+
+                }
+            }
+        });
+
+        togglebtn1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+                if (togglebtn1.isChecked()){
+
+                    graphtitle.setText("Series Graph");
+                    setupGraph();
+
+                }
+                if (!togglebtn1.isChecked()){
+
+                    graphtitle.setText("Bar Chart");
+                    setupBarGraph();
 
                 }
             }
@@ -160,8 +187,13 @@ public class LogFragment extends Fragment implements OneSignal.NotificationRecei
 
     public void setupGraph(){
         graph.removeAllSeries();
-        LineGraphSeries<DataPoint> series = new GraphController().parseTime(rcvd);
-        LineGraphSeries<DataPoint> series1 = new GraphController().parseTime(msgs);
+        graph.getLegendRenderer().setVisible(true);
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+        graph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 5 because of the space
+        LineGraphSeries<DataPoint> series = new GraphController(rcvd).getLineGraph();
+        LineGraphSeries<DataPoint> series1 = new GraphController(msgs).getLineGraph();
 
         series.setTitle("Inbound");
         series1.setTitle("Outbound");
@@ -171,13 +203,37 @@ public class LogFragment extends Fragment implements OneSignal.NotificationRecei
         series1.setDrawDataPoints(true);
         series.setDrawBackground(true);
         series.setBackgroundColor(Color.parseColor("#5974a477"));
+        series.setAnimated(true);
+        series1.setAnimated(true);
         graph.addSeries(series);
         graph.addSeries(series1);
-        graph.getLegendRenderer().setVisible(true);
-        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
-        graph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 5 because of the space
-        graph.getGridLabelRenderer().setHumanRounding(false);
+
+    }
+/*----------------------------------------------------------------------------------*/
+    public void setupBarGraph(){
+        graph.removeAllSeries();
+        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+        staticLabelsFormatter.setHorizontalLabels(new String[] {"Inbound", "Outbound"});
+        graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+        graph.getGridLabelRenderer().setNumHorizontalLabels(2); // only 5 because of the space
+        graph.getGridLabelRenderer().setHumanRounding(true);
+        int sumin = new GraphController(rcvd).getBarGraph();
+        int sumout = new GraphController(msgs).getBarGraph();
+
+        BarGraphSeries<DataPoint> series  = new BarGraphSeries<>(new DataPoint[] {
+                new DataPoint(0, sumin),
+                new DataPoint(1, sumout)
+
+        });
+
+        series.setColor(Color.parseColor("#c63f17"));
+        series.setSpacing(50);
+        series.setAnimated(true);
+        series.setDrawValuesOnTop(true);
+        series.setValuesOnTopColor(Color.BLACK);
+        graph.addSeries(series);
+        graph.getLegendRenderer().setVisible(false);
+
     }
 }
