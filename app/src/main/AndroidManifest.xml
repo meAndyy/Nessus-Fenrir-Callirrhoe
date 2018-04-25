@@ -47,7 +47,8 @@
         </activity>
         <activity android:name="com.example.fragments.AddContactFragment" />
         <activity android:name=".WriteTagActivity" />
-        <activity android:name=".ReadActivty"/>
+        <activity android:name=".ReadActivty" />
+        <activity android:name=".ChangeMessageActivity"></activity>
     </application>
 
 </manifest>

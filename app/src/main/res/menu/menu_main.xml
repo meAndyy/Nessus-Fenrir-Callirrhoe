@@ -8,6 +8,14 @@
         android:icon="@drawable/ic_action_read"
         android:title="Item"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_message"
+        android:title="Change Message"
+        android:icon="@drawable/ic_action_name"
+        app:showAsAction="never"
+        />
+
     <item
         android:id="@+id/action_name"
         android:title="Log Out"

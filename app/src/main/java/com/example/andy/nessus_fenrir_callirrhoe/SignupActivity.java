@@ -23,10 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 public class SignupActivity extends AppCompatActivity {
 
     private EditText email, password;
-    private Button btnSignIn, btnSignUp, btnResetPassword;
-    private ProgressBar progressBar;
+    private Button  btnSignUp, btnResetPassword;
     private FirebaseAuth auth;
-    private DatabaseReference mDatabase;
     private EditText name;
     private EditText phone;
 
@@ -42,7 +40,6 @@ public class SignupActivity extends AppCompatActivity {
         btnSignUp = (Button) findViewById(R.id.btnLogin);
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         btnResetPassword = (Button) findViewById(R.id.btnResetPassword);
         name = (EditText)findViewById(R.id.name);
         phone = (EditText)findViewById(R.id.phone);
@@ -86,14 +83,13 @@ public class SignupActivity extends AppCompatActivity {
                  final User user = new User(mname, mphone, memail);
 
                 final LogHolder logholder = new LogHolder(mname, "");
-                progressBar.setVisibility(View.VISIBLE);
+
                 //create user
                 auth.createUserWithEmailAndPassword(memail, mpass)
                         .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                Toast.makeText(SignupActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(SignupActivity.this, "Account Created: "+name, Toast.LENGTH_SHORT).show();
 
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(SignupActivity.this, "Authentication failed." + task.getException(),
@@ -117,6 +113,6 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        progressBar.setVisibility(View.GONE);
+
     }
 }

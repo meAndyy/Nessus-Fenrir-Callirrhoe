@@ -64,7 +64,7 @@ public class MainFragment extends Fragment {
         txtv =(TextView)v.findViewById(R.id.txtv);
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         String s = sharedPref.getString("curr_contact","DEFAULT");
-        txtv.setText(s);
+        txtv.setText("Current Contact: "+s);
         list = (ExpandableListView)v.findViewById(R.id.list);
 
        /* dbr.child("users").child(uid).child("contacts").addValueEventListener(new ValueEventListener() */
@@ -130,7 +130,7 @@ public class MainFragment extends Fragment {
                 adb.setNegativeButton("No Thanks", null);
                 adb.setPositiveButton("Sure", new AlertDialog.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        txtv.setText(curr);
+                        txtv.setText("Current Contact: "+curr);
                         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString("curr_contact",curr);
@@ -171,9 +171,6 @@ public class MainFragment extends Fragment {
                 i++;
 
             }
-        }
-        else{
-            Log.d("Mytag","Help");
         }
         i = 0;
         return headers;

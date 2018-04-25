@@ -1,6 +1,8 @@
 package com.example.andy.nessus_fenrir_callirrhoe;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -99,6 +101,10 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(LoginActivity.this, "Authentication Failed!!", Toast.LENGTH_LONG).show();
                                     }
                                 } else {
+                                    SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    editor.putString("msg_bdy","");
+                                    editor.apply();
                                     Intent intent = new Intent(LoginActivity.this, NFCActivity.class);
                                     startActivity(intent);
                                     finish();

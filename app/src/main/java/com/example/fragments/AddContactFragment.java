@@ -127,7 +127,7 @@ public class AddContactFragment extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                final AlertDialog.Builder adb = new AlertDialog.Builder(getApplicationContext());
+                final AlertDialog.Builder adb = new AlertDialog.Builder(view.getContext());
                 adb.setTitle("Remove");
                 adb.setMessage("Are you sure you want to remove this item from the group you are creating?");
                 final int positionToRemove = position;

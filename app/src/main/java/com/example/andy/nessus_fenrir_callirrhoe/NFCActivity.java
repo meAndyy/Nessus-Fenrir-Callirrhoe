@@ -38,9 +38,12 @@ import com.example.adapters.TabAdapter;
 
 
 public class NFCActivity extends AppCompatActivity implements MainFragment.OnDataPass {
+    @Override
+    public void onDataPass(HashMap<String, List<String>> data) {
 
+        sendlist = toList(data);
+    }
     protected NdefMessage message = null;
-
     protected NFCmanager nfcMger;
     Tag myTag;
     private ViewPager pager;
@@ -63,6 +66,7 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
                 .setNotificationReceivedHandler(new LogFragment())
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init();
+
         pager = (ViewPager) findViewById(R.id.pager);
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         tabLayout = (TabLayout)findViewById(R.id.tablayout);
@@ -95,6 +99,10 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
                     finish();
                 }
 
+                break;
+
+            case R.id.action_message:
+                startActivity(new Intent(NFCActivity.this, ChangeMessageActivity.class));
                 break;
 
             case R.id.action_add:
@@ -151,20 +159,13 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
             myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NdefMessage[] m = nfcMger.readFromIntent(intent);
             String s = nfcMger.buildTagViews(m);
-            Toast.makeText(this, "Tag value is " + s, Toast.LENGTH_LONG).show();
-
-
-            for(int i = 0; i < sendlist.length;i++) {
-                System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"+sendlist);
-
-            }
 
             if(s.equals(uid) || s.equals("APOMDEFAULTVALUE")){
                 new apiThread().execute(sendlist);
             }
 
         else{
-                Toast.makeText(this, "This is someone elses tag. You'll need their permission to override it.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "This is someone elses tag. You'll need their permission to over-ride it.", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -189,19 +190,6 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
 
         return currconlist.toArray(new String[currconlist.size()]);
         }
-
-
-    @Override
-    public void onDataPass(HashMap<String, List<String>> data) {
-
-         sendlist = toList(data);
-        for(int i = 0; i < sendlist.length;i++) {
-            System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"+sendlist);
-
-        }
-
-
-    }
 
     private void initRecord(){
         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -228,15 +216,16 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
         @Override
         protected Boolean doInBackground(String... params) {
             DatabaseController dbc = new DatabaseController();
-
+            SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
+            String msgbdy = pref.getString("msg_bdy","DEFAULT");
             for (int i = 0; i < params.length; i++) {
                 String playerid = params[i];
-                playerid.trim();
                 RequestAPI api = new RequestAPI();
-                Boolean isSent = api.sendData(playerid);
+                Boolean isSent = api.sendData(playerid,msgbdy);
                 if (isSent) {
                     LogHolder logholder = new LogHolder(playerid, "Outbound");
                     dbc.createLogInDatabase(logholder);
+                    Toast.makeText(NFCActivity.this, "Sending...", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 else{

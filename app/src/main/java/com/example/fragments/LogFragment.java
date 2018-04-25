@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -34,6 +35,7 @@ import com.onesignal.OneSignal;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -83,14 +85,14 @@ public class LogFragment extends Fragment implements OneSignal.NotificationRecei
                 if (togglebtn.isChecked()){
 
                     list.setAdapter(radapter);
-                    logtitle.setText("Received APOM's");
+                    logtitle.setText(R.string.rcvd_apom);
                    // setupGraph();
 
                 }
                 if (!togglebtn.isChecked()){
 
                     list.setAdapter(adapter);
-                    logtitle.setText("Sent APOM's");
+                    logtitle.setText(R.string.sent_apom);
                     //setupBarGraph();
 
                 }
@@ -103,13 +105,13 @@ public class LogFragment extends Fragment implements OneSignal.NotificationRecei
 
                 if (togglebtn1.isChecked()){
 
-                    graphtitle.setText("Series Graph");
+                    graphtitle.setText(R.string.series_graph);
                     setupGraph();
 
                 }
                 if (!togglebtn1.isChecked()){
 
-                    graphtitle.setText("Bar Chart");
+                    graphtitle.setText(R.string.bar_chart);
                     setupBarGraph();
 
                 }
@@ -215,6 +217,11 @@ public class LogFragment extends Fragment implements OneSignal.NotificationRecei
         graph.removeAllSeries();
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
         staticLabelsFormatter.setHorizontalLabels(new String[] {"Inbound", "Outbound"});
+        //NumberFormat nf = NumberFormat.getInstance();
+       // nf.setMinimumFractionDigits(0);
+        //nf.setMinimumIntegerDigits(0);
+
+       // graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(nf, nf));
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
         graph.getGridLabelRenderer().setNumHorizontalLabels(2); // only 5 because of the space
         graph.getGridLabelRenderer().setHumanRounding(true);
@@ -222,6 +229,7 @@ public class LogFragment extends Fragment implements OneSignal.NotificationRecei
         int sumout = new GraphController(msgs).getBarGraph();
 
         BarGraphSeries<DataPoint> series  = new BarGraphSeries<>(new DataPoint[] {
+                new DataPoint(0, 0),
                 new DataPoint(0, sumin),
                 new DataPoint(1, sumout)
 

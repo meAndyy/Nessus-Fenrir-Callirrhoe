@@ -14,5 +14,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_write_tag">WriteTagActivity</string>
+    <string name="series_graph">Series Graph</string>
+    <string name="bar_chart">Bar Chart</string>
+    <string name="sent_apom">Sent APOM\'s</string>
+    <string name="rcvd_apom">Received APOM\'s</string>
 
 </resources>

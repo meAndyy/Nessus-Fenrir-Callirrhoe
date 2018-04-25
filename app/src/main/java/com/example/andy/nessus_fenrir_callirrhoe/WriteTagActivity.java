@@ -24,7 +24,6 @@ public class WriteTagActivity extends NFCActivity {
     RadioGroup rgrp;
     SharedPreferences.Editor editor;
     TextView txt;
-    ProgressBar progressBar2;
 
   @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,6 @@ public class WriteTagActivity extends NFCActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         txt = (TextView)findViewById(R.id.txt);
-        progressBar2 =(ProgressBar)findViewById(R.id.progressBar2);
         rgrp =(RadioGroup)findViewById(R.id.rgrp);
         final  SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         editor = sharedPref.edit();
@@ -87,8 +85,8 @@ public class WriteTagActivity extends NFCActivity {
     @Override
     public void onNewIntent(Intent intent) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        progressBar2.setVisibility(ProgressBar.VISIBLE);
         if(auth.getCurrentUser() != null) {
+
             myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NdefMessage[] m = nfcMger.readFromIntent(intent);
             String s = nfcMger.buildTagViews(m);
@@ -97,13 +95,12 @@ public class WriteTagActivity extends NFCActivity {
 
 
                     nfcMger.writeTag(myTag, message);
-                progressBar2.setVisibility(ProgressBar.INVISIBLE);
                     Toast.makeText(this, "User Info Loaded", Toast.LENGTH_SHORT).show();
             }
 
             else {
                 
-                Toast.makeText(this, "help", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "This tag belongs to someone else. You'll need their permisssion to over-ride it", Toast.LENGTH_SHORT).show();
 
             }
 

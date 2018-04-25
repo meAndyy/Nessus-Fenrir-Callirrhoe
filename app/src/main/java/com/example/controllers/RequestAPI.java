@@ -7,6 +7,7 @@ package com.example.controllers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.example.andy.nessus_fenrir_callirrhoe.NFCActivity;
@@ -27,7 +28,7 @@ public class RequestAPI extends BroadcastReceiver {
 
 
     }
-    public boolean sendData(String email) {
+    public boolean sendData(String email, String msgbdy) {
 
         try {
             String curremail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
@@ -35,7 +36,7 @@ public class RequestAPI extends BroadcastReceiver {
             DatabaseController dbc = new DatabaseController();
             String senderid = dbc.getSenderid();
 
-            String message = "Your friend "+curremail+" has tapped in!";
+            String message = "APOM from"+curremail+": "+ msgbdy;
             URL url = new URL("https://onesignal.com/api/v1/notifications");
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setUseCaches(false);
