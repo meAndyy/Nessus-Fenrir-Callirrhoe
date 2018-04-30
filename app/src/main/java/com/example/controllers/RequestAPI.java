@@ -36,7 +36,7 @@ public class RequestAPI extends BroadcastReceiver {
             DatabaseController dbc = new DatabaseController();
             String senderid = dbc.getSenderid();
 
-            String message = "APOM from"+curremail+": "+ msgbdy;
+            String message = "APOM from "+curremail+": "+ msgbdy;
             URL url = new URL("https://onesignal.com/api/v1/notifications");
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setUseCaches(false);

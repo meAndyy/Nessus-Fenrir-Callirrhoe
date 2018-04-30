@@ -38,6 +38,8 @@ import com.example.adapters.TabAdapter;
 
 
 public class NFCActivity extends AppCompatActivity implements MainFragment.OnDataPass {
+
+
     @Override
     public void onDataPass(HashMap<String, List<String>> data) {
 
@@ -46,20 +48,18 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
     protected NdefMessage message = null;
     protected NFCmanager nfcMger;
     Tag myTag;
-    private ViewPager pager;
-    private TabAdapter adapter;
     public Toolbar toolbar;
-    private TabLayout tabLayout;
     String[] sendlist;
     String usremail;
     String uid;
     FirebaseUser currentFirebaseUser;
+    String msgbdy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
-
+        findPref();
         nfcMger = new NFCmanager(this);
         OneSignal.startInit(this)
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
@@ -67,11 +67,11 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init();
 
-        pager = (ViewPager) findViewById(R.id.pager);
+       ViewPager pager = (ViewPager) findViewById(R.id.pager);
         toolbar = (Toolbar)findViewById(R.id.toolbar);
-        tabLayout = (TabLayout)findViewById(R.id.tablayout);
+        TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         setSupportActionBar(toolbar);
-        adapter = new TabAdapter(getSupportFragmentManager());
+        TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
         tabLayout.setupWithViewPager(pager);
         sendlist = new  String[10];
@@ -124,6 +124,11 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
 
     protected void onResume() {
         super.onResume();
+        String intentmsg = getIntent().getStringExtra("MSG_BDY");
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("msg_bdy",intentmsg);
+        editor.apply();
 
         try {
             nfcMger.verifyNFC();
@@ -161,7 +166,11 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
             String s = nfcMger.buildTagViews(m);
 
             if(s.equals(uid) || s.equals("APOMDEFAULTVALUE")){
+
+                Toast.makeText(this, "Sending..", Toast.LENGTH_LONG).show();
+                findPref();
                 new apiThread().execute(sendlist);
+
             }
 
         else{
@@ -212,12 +221,16 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
         }
     }
 
-    protected class apiThread extends AsyncTask<String,Void,Boolean>{
+    private void findPref(){
+        SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
+        msgbdy = pref.getString("msg_bdy"," ");
+    }
+
+    protected class apiThread extends AsyncTask<String,Integer,Boolean>{
         @Override
         protected Boolean doInBackground(String... params) {
+
             DatabaseController dbc = new DatabaseController();
-            SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
-            String msgbdy = pref.getString("msg_bdy","DEFAULT");
             for (int i = 0; i < params.length; i++) {
                 String playerid = params[i];
                 RequestAPI api = new RequestAPI();
@@ -225,18 +238,17 @@ public class NFCActivity extends AppCompatActivity implements MainFragment.OnDat
                 if (isSent) {
                     LogHolder logholder = new LogHolder(playerid, "Outbound");
                     dbc.createLogInDatabase(logholder);
-                    Toast.makeText(NFCActivity.this, "Sending...", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 else{
-                    Toast.makeText(NFCActivity.this, "Error sending try again", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(NFCActivity.this, "Error sending try again", Toast.LENGTH_SHORT).show();
                     return false;
                 }
             }
 
-
             return true;
         }
+
     }
 
 }

@@ -101,10 +101,6 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(LoginActivity.this, "Authentication Failed!!", Toast.LENGTH_LONG).show();
                                     }
                                 } else {
-                                    SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedPref.edit();
-                                    editor.putString("msg_bdy","");
-                                    editor.apply();
                                     Intent intent = new Intent(LoginActivity.this, NFCActivity.class);
                                     startActivity(intent);
                                     finish();

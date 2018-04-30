@@ -136,14 +136,12 @@ public class MainFragment extends Fragment {
                         editor.putString("curr_contact",curr);
                         editor.apply();
                         String s = sharedPref.getString("curr_contact","DEFAULT");
-                        Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
                     }});
                 adb.show();
                 return true;
             }
         });
-
-
 
         return v;
     }

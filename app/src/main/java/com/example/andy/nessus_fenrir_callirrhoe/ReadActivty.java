@@ -3,15 +3,11 @@ package com.example.andy.nessus_fenrir_callirrhoe;
 import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.io.UnsupportedEncodingException;
 
 public class ReadActivty extends WriteTagActivity{
 
@@ -22,7 +18,7 @@ public class ReadActivty extends WriteTagActivity{
         setContentView(R.layout.activity_read_activty);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        txt = (TextView)findViewById(R.id.txt);
+        txt = (TextView)findViewById(R.id.toptxt);
     }
 
     @Override

@@ -91,12 +91,6 @@ public class GraphController {
                 new DataPoint(d4, day4)
         });
 
-        System.out.println("$$$$$$$$$*"+day0+""+d0);
-        System.out.println("$$$$$$$$$*"+day1+""+d1);
-        System.out.println("$$$$$$$$$*"+day2+""+d2);
-        System.out.println("$$$$$$$$$*"+day3+""+d3);
-        System.out.println("$$$$$$$$$*"+day4+""+d4);
-
         return series;
     }
 
